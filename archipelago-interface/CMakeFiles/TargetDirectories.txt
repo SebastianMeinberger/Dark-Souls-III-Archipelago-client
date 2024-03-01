@@ -1,0 +1,3 @@
+/home/seb/Documents/Dark-Souls-III-Archipelago-client/archipelago-client/CMakeFiles/archipelago-client.dir
+/home/seb/Documents/Dark-Souls-III-Archipelago-client/archipelago-client/CMakeFiles/edit_cache.dir
+/home/seb/Documents/Dark-Souls-III-Archipelago-client/archipelago-client/CMakeFiles/rebuild_cache.dir
