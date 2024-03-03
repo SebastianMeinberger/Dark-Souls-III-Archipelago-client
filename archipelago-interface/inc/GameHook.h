@@ -1,6 +1,6 @@
 #pragma once
 #include "Core.h"
-#include "./subprojects/minhook/include/MinHook.h"
+#include "MinHook.h"
 
 #define ItemType_Weapon 0
 #define ItemType_Protector 1

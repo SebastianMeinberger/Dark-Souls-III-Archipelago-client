@@ -4,9 +4,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 //#define WSWRAP_NO_SSL
 
-#include "subprojects/apclientpp/apclient.hpp"
+#include "apclient.hpp"
 #include <windows.h>
-#include <Windows.h>
+//#include <Windows.h>
 #include <iostream>
 #include <vector>
 #include <map>
@@ -17,7 +17,7 @@
 #include <tlhelp32.h>
 #include <stdio.h>
 #include <functional>
-#include "./subprojects/json/include/nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 #include "ArchipelagoInterface.h"
 
 #define int3 __debugbreak();

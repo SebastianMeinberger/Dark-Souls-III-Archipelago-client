@@ -2,8 +2,8 @@
 
 #include "Core.h"
 #include "GameHook.h"
-#include "subprojects/apclientpp/apclient.hpp"
-#include "subprojects/apclientpp/apuuid.hpp"
+#include "apclient.hpp"
+#include "apuuid.hpp"
 
 using nlohmann::json;
 
