@@ -1,0 +1,27 @@
+{
+  "version": 8,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "include": [],
+  "configurePresets": [
+	{
+      "name": "vcpkg_linux",
+      "displayName": "vcpkg config",
+      "description": "Default build using Unix Makefiles and vcpkg",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/vcpkg",
+      "cacheVariables": {"VCPKG_CMAKE_SYSTEM_NAME": "MinGW"},
+      "environment": {"VCPKG_CMAKE_SYSTEM_NAME": "MinGW"},
+      "vendor": {},
+	  "toolchainFile": "/opt/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    }
+],
+  "buildPresets": [],
+  "testPresets": [],
+  "packagePresets": [],
+  "workflowPresets": [],
+  "vendor": {}
+}

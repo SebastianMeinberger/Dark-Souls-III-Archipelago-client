@@ -1,15 +1,6 @@
 [submodule "subprojects/apclientpp/apclientpp"]
 	path = subprojects/apclientpp/apclientpp
 	url = https://github.com/black-sliver/apclientpp.git
-[submodule "subprojects/minhook/minhook"]
-	path = subprojects/minhook/minhook
-	url = https://github.com/TsudaKageyu/minhook.git
-[submodule "subprojects/websocketpp/websocketpp"]
-	path = subprojects/websocketpp/websocketpp
-	url = https://github.com/zaphoyd/websocketpp.git
 [submodule "subprojects/wswrap/wswrap"]
 	path = subprojects/wswrap/wswrap
 	url = https://github.com/black-sliver/wswrap.git
-[submodule "subprojects/asio/asio"]
-	path = subprojects/asio/asio
-	url = https://github.com/chriskohlhoff/asio.git
