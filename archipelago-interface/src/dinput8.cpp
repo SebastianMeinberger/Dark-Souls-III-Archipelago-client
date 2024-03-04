@@ -3,7 +3,7 @@
 HINSTANCE mHinst = 0, mHinstDLL = 0;
 extern "C" UINT_PTR mProcs[6] = { 0 };
 
-CCore Core;
+CCore Core_wtf;
 
 LPCSTR mImportNames[6] = {
 
@@ -33,7 +33,7 @@ DWORD WINAPI Begin(LPVOID lpParam) {
 		mProcs[i] = (UINT_PTR)GetProcAddress(mHinstDLL, mImportNames[i]);
 	};
 
-	CreateThread(0, 0, (LPTHREAD_START_ROUTINE)Core.Start, 0, 0, 0);
+	CreateThread(0, 0, (LPTHREAD_START_ROUTINE)Core_wtf.Start, 0, 0, 0);
 
 	return FALSE;
 };
