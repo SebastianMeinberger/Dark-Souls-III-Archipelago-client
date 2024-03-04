@@ -1,6 +1,8 @@
 {
   "dependencies":[
-	"boost-asio",
+	"asio",
+	"websocketpp",
+	"boost-thread",
 	"valijson",
 	"nlohmann-json",
 	"minhook"
