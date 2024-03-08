@@ -41,12 +41,12 @@ BOOL CGameHook::initialize() {
 
 	//Inject ItemGibData
 	try {
-		itemGibDataCodeCave = InjectShellCode(nullptr, ItemGibDataShellcode, 17);
+		itemGibDataCodeCave = InjectShellCode(nullptr, ItemGibDataShellcode, 17);	
 	} catch (const std::exception&) {
 		Core->Logger("Cannot inject ItemGibData");
 		return false;
 	}
-
+	
 	//Modify ItemGibShellcode
 	try {
 		bReturn &= replaceShellCodeAddress(ItemGibShellcode, 15, itemGibDataCodeCave, 0, sizeof(void*));
@@ -56,7 +56,7 @@ BOOL CGameHook::initialize() {
 		Core->Logger("Cannot modify ItemGibShellcode");
 		return false;
 	}
-
+	
 	//Inject ItemGibShellcode
 	try {
 		LPVOID itemGibCodeCave = InjectShellCode((LPVOID)0x13ffe0000, ItemGibShellcode, 93);
@@ -112,14 +112,13 @@ VOID CGameHook::killThePlayer() {
 	WriteProcessMemory(hProcess, (BYTE*)healthPointAddr, &newHP, sizeof(newHP), nullptr);
 }
 
-BOOL CGameHook::updateRuntimeValues() {
+VOID CGameHook::updateRuntimeValues() {
 
 	DWORD processId = GetCurrentProcessId();
 	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, processId);
 
 	std::vector<unsigned int> hpOffsets = { 0x80, 0x1F90, 0x18, 0xD8 };
 	uintptr_t healthPointAddr = FindExecutableAddress(0x4768E78, hpOffsets); //BaseB + HP Offsets
-
 	std::vector<unsigned int> playTimeOffsets = { 0xA4 };
 	uintptr_t playTimeAddr = FindExecutableAddress(0x4740178, playTimeOffsets); //BaseA + PlayTime Offsets	
 
@@ -131,17 +130,17 @@ BOOL CGameHook::updateRuntimeValues() {
 	ReadProcessMemory(hProcess, (BYTE*)healthPointAddr, &healthPoint, sizeof(healthPoint), &healthPointRead);
 	ReadProcessMemory(hProcess, (BYTE*)playTimeAddr, &playTime, sizeof(playTime), &playTimeRead);
 	ReadProcessMemory(hProcess, (BYTE*)soulOfCinderDefeatedFlagAddress, &soulOfCinderDefeated, sizeof(soulOfCinderDefeated), &soulOfCinderDefeatedFlagRead);
-
+	
 	//Enable the Path of The Dragon Gesture manually when receiving the item
 	if (ItemRandomiser->enablePathOfTheDragon) {
 		ItemRandomiser->enablePathOfTheDragon = false;
-
 		std::vector<unsigned int> pathOfDragonOffsets = { 0x10, 0x7B8, 0x90 };
 		uintptr_t gestureAddr = FindExecutableAddress(0x4740178, pathOfDragonOffsets); //BaseA + Path of the dragon Offsets
 
 		char gestureUnlocked = 0x43;
 		WriteProcessMemory(hProcess, (BYTE*)gestureAddr, &gestureUnlocked, sizeof(gestureUnlocked), nullptr);
 	}
+	
 }
 
 VOID CGameHook::giveItems() {
@@ -174,7 +173,7 @@ VOID CGameHook::itemGib(DWORD itemId) {
 		DWORD newMemory = itemId;
 		WriteProcessMemory(hProcess, (BYTE*)gibItem, &newMemory, sizeof(newMemory), nullptr);
 	} catch (const std::exception&) {
-		Core->Logger("Cannot write the item to the memory");
+		Core->Logger("Cannot write the item to the memory",true,true);
 	}
 
 	try {
@@ -182,7 +181,7 @@ VOID CGameHook::itemGib(DWORD itemId) {
 		func* f = (func*)0x13ffe0000;
 		CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)f, NULL, NULL, NULL);
 	} catch (const std::exception&) {
-		Core->Logger("Cannot start the 0x13ffe0000 thread");
+		Core->Logger("Cannot start the 0x13ffe0000 thread",true,true);
 	}
 }
 

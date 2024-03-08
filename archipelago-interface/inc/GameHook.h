@@ -16,7 +16,7 @@ public:
 	virtual BOOL preInitialize();
 	virtual BOOL initialize();
 	virtual BOOL applySettings();
-	virtual BOOL updateRuntimeValues();
+	virtual VOID updateRuntimeValues();
 	virtual VOID giveItems();
 	virtual VOID itemGib(DWORD itemId);
 	virtual BOOL isSoulOfCinderDefeated();
@@ -24,7 +24,7 @@ public:
 	virtual BYTE* findPattern(BYTE* pBaseAddress, BYTE* pbMask, const char* pszMask, size_t nLength);
 	int healthPoint = -1, lastHealthPoint = -1, playTime = -1;
 	char soulOfCinderDefeated;
-	SIZE_T healthPointRead, playTimeRead, soulOfCinderDefeatedFlagRead;
+	SIZE_T healthPointRead = 0, playTimeRead = 0, soulOfCinderDefeatedFlagRead = 0;
 
 	DWORD dIsAutoEquip;
 	DWORD dLockEquipSlots;
@@ -194,7 +194,7 @@ public:
 		{ 0x400004D8, -1 }, //Hollow Gem
 		{ 0x400004E2, -1 }, //Shriving Stone
 	};
-	bool enablePathOfTheDragon;
+	BOOL enablePathOfTheDragon = false;
 
 private:
 	int isARandomizedLocation(DWORD dItemID);
