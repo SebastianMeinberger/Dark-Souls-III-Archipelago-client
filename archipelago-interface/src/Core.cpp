@@ -40,17 +40,14 @@ VOID CCore::Start() {
 BOOL CCore::Initialise() {
 
 	//Setup the client console
-	FILE* fp;
 	AllocConsole();
 	SetConsoleTitleA("Dark Souls III - Archipelago Console");
-	freopen_s(&fp, "CONOUT$", "w", stdout);
-	freopen_s(&fp, "CONIN$", "r", stdin);
 	Core->Logger(std::string("Archipelago client v") + VERSION);
 	Core->Logger("A new version may or may not be available, please check this link for updates : https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases", false);
 	Core->Logger("Type '/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} [password:{PASSWORD}]' to connect to the room", false);
 	Core->Logger("Type '/help for more information", false);
 	Core->Logger("-----------------------------------------------------", false);
-
+	
 	if (!GameHook->preInitialize()) {
 		Core->Panic("Check if the game version is 1.15 and not 1.15.1, you must use the provided DarkSoulsIII.exe", "Cannot hook the game", FE_InitFailed, 1);
 		return false;
@@ -64,7 +61,7 @@ BOOL CCore::Initialise() {
 	if (CheckOldApFile()) {
 		Core->Logger("The AP.json file is not supported in this version, make sure to finish your previous seed on version 1.2 or use this version on the new Archipelago server");
 	}
-
+		
 	//Start command prompt
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Core->InputCommand, NULL, NULL, NULL);
 
@@ -98,7 +95,7 @@ VOID CCore::Run() {
 				Core->Panic("Failed to apply settings", "...\\Randomiser\\Core\\Core.cpp", FE_ApplySettings, 1);
 				int3
 			}
-			printf("Mod initialized successfully\n");
+			Core->Logger("Mod initialized successfully",true,true);
 			isInit = true;
 		}
 
@@ -116,7 +113,7 @@ VOID CCore::Run() {
 			}
 		} else {
 			int secondsRemaining = (RUN_SLEEP / 1000) * initProtectionDelay;
-			printf("The mod will be initialized in %d seconds\n", secondsRemaining);
+			Core->Logger("The mod will be initialized in " + std::to_string(secondsRemaining) + " seconds", true, true);
 			initProtectionDelay--;
 		}
 	}
@@ -132,7 +129,7 @@ VOID CCore::Run() {
 */
 VOID CCore::CleanReceivedItemsList() {
 	if (!ItemRandomiser->receivedItemsQueue.empty()) {
-		Core->Logger("Removing " + pLastReceivedIndex + std::string(" items according to the last_received_index"), true, false);
+		Core->Logger("Removing " + std::to_string(pLastReceivedIndex) + " items according to the last_received_index", true, false);
 		for (int i = 0; i < pLastReceivedIndex; i++) {
 			ItemRandomiser->receivedItemsQueue.pop_back();
 		}
@@ -165,28 +162,30 @@ VOID CCore::Panic(const char* pMessage, const char* pSort, DWORD dError, DWORD d
 
 
 VOID CCore::InputCommand() {
+	
 	while (true) {
-		std::string line;
-		std::getline(std::cin, line);
-
-		if (line == "/help") {
-			printf("List of available commands : \n");
-			printf("/help : Prints this help message.\n");
-			printf("!help : Prints the help message related to Archipelago.\n");
-			printf("/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} [password:{PASSWORD}] : Connect to the specified server.\n");
-			printf("/debug on|off : Prints additional debug info \n");
-		}
-
+		char* c_line = new char[512];
+		HANDLE in = GetStdHandle(STD_INPUT_HANDLE);
+		DWORD length = 0;
+		ReadConsole(in,(LPVOID)c_line,512,(LPDWORD)&length, NULL);
+		std::string line (c_line);
+		if (line.find("/help") == 0) {
+			Core->Logger("List of available commands:\n",true,true);
+			Core->Logger("/help : Prints this help message.\n",true,true);
+			Core->Logger("!help : Prints the help message related to Archipelago.\n", true, true);
+			Core->Logger("/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} [password:{PASSWORD}] : Connect to the specified server.\n", true , true);
+			Core->Logger("/debug on|off : Prints additional debug info \n", true, true);
+		}	
 #ifdef DEBUG
 		if (line.find("/itemGib ") == 0) {
 			std::string param = line.substr(9);
-			std::cout << "/itemGib executed with " << param << "\n";
+			Core->Logger("/itemGib executed with " + param + "\n", true, true);
 			GameHook->itemGib(std::stoi(param));
 		}
 
 		if (line.find("/give ") == 0) {
 			std::string param = line.substr(6);
-			std::cout << "/give executed with " << param << "\n";
+			Core->Logger("/give executed with " + param + "\n", true, true);
 			ItemRandomiser->receivedItemsQueue.push_front(std::stoi(param));
 		}
 
@@ -215,13 +214,13 @@ VOID CCore::InputCommand() {
 			std::string param = line.substr(9);
 			int spaceIndex = param.find(" ");
 			if (spaceIndex == std::string::npos) {
-				Core->Logger("Missing parameter : Make sure to type '/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} [password:{PASSWORD}]'");
+				Core->Logger("Missing parameter : Make sure to type '/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} [password:{PASSWORD}]'", true, true);
 			} else {
 				int passwordIndex = param.find("password:");
 				std::string address = param.substr(0, spaceIndex);
 				std::string slotName = param.substr(spaceIndex + 1, passwordIndex - spaceIndex - 2);
 				std::string password = "";
-				std::cout << address << " - " << slotName << "\n";
+				Core->Logger(address + " - " + slotName + "\n", true, true);
 				Core->pSlotName = slotName;
 				if (passwordIndex != std::string::npos)
 				{
@@ -237,7 +236,7 @@ VOID CCore::InputCommand() {
 		else if (line.find("!") == 0) {
 			ArchipelagoInterface->say(line);
 		}
-	}
+	}	
 };
 
 VOID CCore::ReadConfigFiles() {
@@ -335,8 +334,11 @@ inline std::string getCurrentDateTime(std::string s) {
 
 VOID CCore::Logger(std::string logMessage, BOOL inFile, BOOL inConsole) {
 
-	if(inConsole)
-		std::cout << logMessage << std::endl;
+	if(inConsole) {
+		HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);	
+		LPDWORD written;
+		WriteConsole(out, logMessage.c_str(), logMessage.length()+1, written, NULL);
+	}
 
 	if (inFile) {
 		try {
