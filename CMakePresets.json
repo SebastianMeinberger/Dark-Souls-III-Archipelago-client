@@ -8,16 +8,23 @@
   "include": [],
   "configurePresets": [
 	{
-      "name": "vcpkg_linux",
-      "displayName": "vcpkg config",
+      "name": "mingw",
+      "displayName": "mingw with vcpkg",
       "description": "Default build using Unix Makefiles and vcpkg",
       "generator": "Unix Makefiles",
-      "binaryDir": "${sourceDir}/build/vcpkg",
-      "cacheVariables": {"VCPKG_CMAKE_SYSTEM_NAME": "MinGW"},
-      "environment": {"VCPKG_CMAKE_SYSTEM_NAME": "MinGW"},
-      "vendor": {},
-	  "toolchainFile": "/opt/vcpkg/scripts/buildsystems/vcpkg.cmake"
-    }
+	  "binaryDir": "${sourceDir}/build/vcpkg",
+      "cacheVariables": {
+			"VCPKG_CMAKE_SYSTEM_NAME": "MinGW",
+			"CMAKE_SYSTEM_NAME": "MinGW",
+			"CMAKE_C_COMPILER": "x86_64-w64-mingw32-gcc",
+			"CMAKE_CXX_COMPILER": "x86_64-w64-mingw32-g++",
+			"VCPKG_TARGET_TRIPLET": "x64-mingw-static",
+			"CMAKE_ASM_MASM_COMPILER": "jwasm",
+			"CMAKE_EXPORT_COMPILE_COMMANDS": "on"
+			},
+      "environment": {},
+      "vendor": {}
+	}
 ],
   "buildPresets": [],
   "testPresets": [],
