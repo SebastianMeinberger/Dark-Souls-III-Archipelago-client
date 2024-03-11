@@ -1,6 +1,6 @@
 name: Fetch apt dependecys or load them from cach
 
-env:
+on: workflow_dispatch
 
 jobs:
   fetch_deps:
