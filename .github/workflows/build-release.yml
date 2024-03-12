@@ -8,9 +8,6 @@ jobs:
 
     steps:
 
-      #- name: Get apt dependencies
-      #run: sudo apt update && sudo apt install -y build-essential pkg-config mingw-w64 ninja-build cmake unzip
-      #
     - name: Cach apt dependencies
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
@@ -38,19 +35,4 @@ jobs:
     
     - name: Create links to bins
       run: sudo ln -s /opt/deps/vcpkg/vcpkg /usr/bin/vcpkg && sudo ln -s /opt/deps/uasm /usr/bin/uasm
-
-    - name: Test vcpkg
-      run: ls -l /opt/vcpkg
-
-    - name: Test vcpkg bin
-      run: ls -l /usr/bin/vcpkg
-
-    - name: Test uasm link
-      run: ls -l /usr/bin/uasm
-
-    - name: Test uasm
-      run: ls -l /opt/uasm
-        #- name: Test dependencies
-        #run: vcpkg --version && uasm -h && ninja --version && x86_64-w64-mingw32-g++ --version && x86_64-w64-mingw32-gcc --version && cmake --version
-
     
