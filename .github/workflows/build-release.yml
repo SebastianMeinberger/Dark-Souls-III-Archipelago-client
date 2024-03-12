@@ -22,8 +22,8 @@ jobs:
       with:
         path:
           /opt/vcpkg
-          /usr/local/bin/vcpkg
-          /usr/local/bin/uasm
+          /usr/bin/vcpkg
+          /usr/bin/uasm
         key: non-apt-build-deps
 
     - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
@@ -32,7 +32,7 @@ jobs:
 
     - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
       name: Get MASM assembler
-      run: wget https://github.com/Terraspace/UASM/files/9881874/uasm256_linux64.zip && unzip uasm256_linux64.zip && chmod +x uasm && sudo mv uasm /usr/local/bin/uasm
+      run: wget https://github.com/Terraspace/UASM/files/9881874/uasm256_linux64.zip && unzip uasm256_linux64.zip && chmod +x uasm && sudo mv uasm /usr/bin/uasm
 
         #- name: Test dependencies
         #run: vcpkg --version && uasm -h && ninja --version && x86_64-w64-mingw32-g++ --version && x86_64-w64-mingw32-gcc --version && cmake --version
