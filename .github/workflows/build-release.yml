@@ -24,7 +24,7 @@ jobs:
           /opt/vcpkg
           /usr/bin/vcpkg
           /usr/bin/uasm
-          ~/uasm
+          uasm
         key: non-apt-build-deps
 
     - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
@@ -47,9 +47,6 @@ jobs:
 
     - name: Test uasm link
       run: ls -l /usr/bin/uasm
-
-    - name: Test uasm
-      run: ls -l ~/uasm
 
         #- name: Test dependencies
         #run: vcpkg --version && uasm -h && ninja --version && x86_64-w64-mingw32-g++ --version && x86_64-w64-mingw32-gcc --version && cmake --version
