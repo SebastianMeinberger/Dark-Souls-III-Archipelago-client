@@ -35,11 +35,6 @@ jobs:
       name: Get MASM assembler
       run: wget https://github.com/Terraspace/UASM/files/9881874/uasm256_linux64.zip && unzip uasm256_linux64.zip && chmod +x uasm && sudo cp uasm /opt/ && sudo ln -s /opt/uasm /usr/bin/uasm
 
-
-    - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
-      name: Get MASM assembler
-      run: cp uasm sudo ln -s ~/uasm /usr/bin/uasm
-
     - name: Test vcpkg
       run: ls -l /opt/vcpkg
 
