@@ -34,6 +34,15 @@ jobs:
       name: Get MASM assembler
       run: wget https://github.com/Terraspace/UASM/files/9881874/uasm256_linux64.zip && unzip uasm256_linux64.zip && chmod +x uasm && sudo mv uasm /usr/bin/uasm
 
+    - name: Test vcpkg
+      run: ls -l /opt/vcpkg
+
+    - name: Test vcpkg bin
+      run: ls -l /usr/bin/vcpkg
+
+    - name: Test uasm
+      run: ls -l /urs/bin/uasm
+
         #- name: Test dependencies
         #run: vcpkg --version && uasm -h && ninja --version && x86_64-w64-mingw32-g++ --version && x86_64-w64-mingw32-gcc --version && cmake --version
 
