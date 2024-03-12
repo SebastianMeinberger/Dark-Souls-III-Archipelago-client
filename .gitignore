@@ -1,6 +1,7 @@
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
+**/CMakeFiles/
 CMakeScripts
 Testing
 Makefile
@@ -13,3 +14,4 @@ _deps
 build/
 vcpkg_installed/
 CopyOfCMakeCache.txt
+.ccls-cache

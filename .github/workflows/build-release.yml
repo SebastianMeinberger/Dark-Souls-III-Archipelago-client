@@ -9,10 +9,13 @@ jobs:
     steps:
 
     - name: Get apt dependencies
-      run: sudo apt update && sudo apt install -y mingw-w64 vcpkg ninja cmake unzip
+      run: sudo apt update && sudo apt install -y build-essential pkg-config mingw-w64 ninja-build cmake unzip
+
+    - name: Get vcpkg
+      run: wget -qO vcpkg.tar.gz https://github.com/microsoft/vcpkg/archive/master.tar.gz && sudo mkdir /opt/vcpkg && sudo tar xf vcpkg.tar.gz --strip-components=1 -C /opt/vcpkg && sudo /opt/vcpkg/bootstrap-vcpkg.sh && sudo ln -s /opt/vcpkg/vcpkg /usr/local/bin/vcpkg
 
     - name: Get MASM assembler
-      run: wget https://github.com/Terraspace/UASM/files/9881874/uasm256_linux64.zip && unzip uasm256_linux64.zip && chmod +x uasm && sudo mv uasm /bin/
+      run: wget https://github.com/Terraspace/UASM/files/9881874/uasm256_linux64.zip && unzip uasm256_linux64.zip && chmod +x uasm && sudo mv uasm /usr/local/bin/uasm
 
     - name: Test dependencies
-      run: uasm -h
+      run: vcpkg --version && uasm -h && ninja --version && x86_64-w64-mingw32-g++ --version && x86_64-w64-mingw32-gcc --version && cmake --version
