@@ -21,19 +21,23 @@ jobs:
       uses: actions/cache@v4
       with:
         path:
-          /opt
+          /opt/deps
         key: non-apt-build-deps
+    
+    - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
+      name: Create dependencie patth
+      run: sudo mkdir /opt/deps
 
     - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
       name: Get vcpkg
-      run: wget -qO vcpkg.tar.gz https://github.com/microsoft/vcpkg/archive/master.tar.gz && sudo mkdir /opt/vcpkg && sudo tar xf vcpkg.tar.gz --strip-components=1 -C /opt/vcpkg && sudo /opt/vcpkg/bootstrap-vcpkg.sh
+      run: wget -qO vcpkg.tar.gz https://github.com/microsoft/vcpkg/archive/master.tar.gz && sudo mkdir /opt/vcpkg && sudo tar xf vcpkg.tar.gz --strip-components=1 -C /opt/deps/vcpkg && sudo /opt/deps/vcpkg/bootstrap-vcpkg.sh
     
     - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
       name: Get MASM assembler
-      run: wget https://github.com/Terraspace/UASM/files/9881874/uasm256_linux64.zip && unzip uasm256_linux64.zip && chmod +x uasm && sudo cp uasm /opt/
+      run: wget https://github.com/Terraspace/UASM/files/9881874/uasm256_linux64.zip && unzip uasm256_linux64.zip && chmod +x uasm && sudo cp uasm /opt/deps/
     
     - name: Create links to bins
-      run: sudo ln -s /opt/vcpkg/vcpkg /usr/bin/vcpkg && sudo ln -s /opt/uasm /usr/bin/uasm
+      run: sudo ln -s /opt/deps/vcpkg/vcpkg /usr/bin/vcpkg && sudo ln -s /opt/deps/uasm /usr/bin/uasm
 
     - name: Test vcpkg
       run: ls -l /opt/vcpkg
