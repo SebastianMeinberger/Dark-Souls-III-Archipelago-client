@@ -3,19 +3,38 @@ name: Fetch apt dependecys or load them from cach
 on: workflow_dispatch
 
 jobs:
-  fetch_deps:
+  setup:
     runs-on: ubuntu-latest
 
     steps:
 
-    - name: Get apt dependencies
-      run: sudo apt update && sudo apt install -y build-essential pkg-config mingw-w64 ninja-build cmake unzip
+      #- name: Get apt dependencies
+      #run: sudo apt update && sudo apt install -y build-essential pkg-config mingw-w64 ninja-build cmake unzip
+      #
+    - name: Cach apt dependencies
+      uses: awalsh128/cache-apt-pkgs-action@latest
+      with:
+        packages: build-essential pkg-config mingw-w64 ninja-build cmake unzip
 
-    - name: Get vcpkg
+    - name: Cach non apt dependencies
+      id: cach-non-apt
+      uses: actions/cache@v4
+      with:
+        path:
+          /opt/vcpkg
+          /usr/local/bin/vcpkg
+          /usr/local/bin/uasm
+        key: non-apt-build-deps
+
+    - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
+      name: Get vcpkg
       run: wget -qO vcpkg.tar.gz https://github.com/microsoft/vcpkg/archive/master.tar.gz && sudo mkdir /opt/vcpkg && sudo tar xf vcpkg.tar.gz --strip-components=1 -C /opt/vcpkg && sudo /opt/vcpkg/bootstrap-vcpkg.sh && sudo ln -s /opt/vcpkg/vcpkg /usr/local/bin/vcpkg
 
-    - name: Get MASM assembler
+    - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
+      name: Get MASM assembler
       run: wget https://github.com/Terraspace/UASM/files/9881874/uasm256_linux64.zip && unzip uasm256_linux64.zip && chmod +x uasm && sudo mv uasm /usr/local/bin/uasm
 
-    - name: Test dependencies
-      run: vcpkg --version && uasm -h && ninja --version && x86_64-w64-mingw32-g++ --version && x86_64-w64-mingw32-gcc --version && cmake --version
+        #- name: Test dependencies
+        #run: vcpkg --version && uasm -h && ninja --version && x86_64-w64-mingw32-g++ --version && x86_64-w64-mingw32-gcc --version && cmake --version
+
+    
