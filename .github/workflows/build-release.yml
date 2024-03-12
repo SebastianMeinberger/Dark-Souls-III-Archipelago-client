@@ -24,7 +24,7 @@ jobs:
           /opt/vcpkg
           /usr/bin/vcpkg
           /usr/bin/uasm
-          uasm
+          ~/uasm
         key: non-apt-build-deps
 
     - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
