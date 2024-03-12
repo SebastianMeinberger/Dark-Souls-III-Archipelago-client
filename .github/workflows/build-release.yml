@@ -8,13 +8,13 @@ jobs:
 
     steps:
 
-    - name: Cach apt dependencies
+    - name: Cache apt dependencies
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
         packages: build-essential pkg-config mingw-w64 ninja-build cmake unzip
 
-    - name: Cach non apt dependencies
-      id: cach-non-apt
+    - name: Cache non apt dependencies
+      id: cache-non-apt
       uses: actions/cache@v4
       with:
         path:
