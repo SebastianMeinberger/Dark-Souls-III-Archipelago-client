@@ -46,7 +46,7 @@ jobs:
       run: ls -l /usr/bin/vcpkg
 
     - name: Test uasm link
-      run: ls -l /urs/bin/uasm
+      run: ls -l /urs/bin
 
     - name: Test uasm
       run: ls -l ~/uasm
