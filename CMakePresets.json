@@ -14,20 +14,26 @@
       "generator": "Unix Makefiles",
 	  "binaryDir": "${sourceDir}/build/vcpkg",
       "cacheVariables": {
-			"VCPKG_CMAKE_SYSTEM_NAME": "mingw",
+			
+			"CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES": "/usr/x86_64-w64-mingw32/include",
 			"CMAKE_SYSTEM_NAME": "mingw",
 			"CMAKE_SYSTEM_PROCESSOR": "x86_64",
-			"CMAKE_C_COMPILER": "x86_64-w64-mingw32-gcc",
 			"CMAKE_CXX_COMPILER": "x86_64-w64-mingw32-g++",
 			"CMAKE_ASM_MASM_COMPILER": "uasm",
-			"CMAKE_RC_COMPILER": "x86_64-w64-mingw32-windres",
-			"CMAKE_MC_COMPILER": "x86_64-w64-mingw32-windmc",
 			"CMAKE_FIND_ROOT_PATH": "/usr/x86_64-w64-mingw32",
-			"(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM": "NEVER",
+			"CMAKE_FIND_ROOT_PATH_MODE_PROGRAM": "NEVER",
 			"VCPKG_TARGET_TRIPLET": "x64-mingw-static",
-			"CMAKE_EXPORT_COMPILE_COMMANDS": "on"
+			"CMAKE_EXPORT_COMPILE_COMMANDS": "on",
+			"CMAKE_TOOLCHAIN_FILE":"$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
 			},
-      "environment": {},
+      "environment": {
+			"PATH": "/usr/x86_64-w64-mingw32/bin:$penv{PATH}",
+			"CPPFLAGS": "-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS",
+			"CXXFLAGS": "-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -O2 -pipe -fno-plt -fexceptions --param=ssp-buffer-size=4 -Wformat -Werror=format-security -fcf-protection",
+			"LDFLAGS": "-Wl,-O1,--sort-common,--as-needed -fstack-protector",
+			"CC": "x86_64-w64-mingw32-gcc",
+			"CXX": "x86_64-w64-mingw32-g++"
+			},
       "vendor": {}
 	}
 ],
