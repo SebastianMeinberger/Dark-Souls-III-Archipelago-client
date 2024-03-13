@@ -47,7 +47,7 @@ jobs:
         key: vcpkg-cache-${{ hashFiles('vcpkg.json') }}
 
     - name: CMake
-      run: cmake --preset mingw CMakeLists.txt
+      run: env VCPKG_ROOT=/opt/vcpkg cmake --preset mingw CMakeLists.txt
     
     - name: Build
       run: make -C build/vcpkg/ all
