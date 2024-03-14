@@ -64,8 +64,12 @@ jobs:
     - name: Build
       run: make -C build/vcpkg/ all
 
+    - if: always()
+      name: Debug 5
+      run: ls -lh build/vcpkg/archipelago-interface/dinput8.dll
+
     - name: Save dll
       uses: actions/upload-artifact@v4
       with:
-        name: dinput8.dll
+        name: dinput8
         path: build/vcpkg/archipelago-interface/dinput8.dll
