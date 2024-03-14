@@ -11,7 +11,7 @@ jobs:
     - name: Cache apt dependencies
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
-        packages: build-essential pkg-config mingw-w64 binutils-mingw-w64 cmake unzip
+        packages: build-essential pkg-config mingw-w64 binutils-mingw-w64-x86-64 cmake unzip
 
     - name: Cache non apt dependencies
       id: cache-non-apt
@@ -47,37 +47,21 @@ jobs:
     - name: Cach vcpkg packages 
       uses: actions/cache@v4
       with:
-        path: build/vcpkg/vcpkg_installed
+        path: build/vcpkg/vcpkg_installed/x64-mingw-static
         key: vcpkg-cache-${{ hashFiles('vcpkg.json') }}
+
+    - name: CMake
+      run: env VCPKG_ROOT=/opt/deps/vcpkg cmake --preset mingw CMakeLists.txt 
     
-    - name: Debug
-      if: always()
-      run: x86_64-w64-mingw32-g++ --version
+    - name: Build
+      run: make -C build/vcpkg/ all
 
-    - name: Debug 2
-      if: always()
-      run: x86_64-w64-mingw32-gcc --version
+    - if: always()
+      name: Debug 5
+      run: ls -lh build/vcpkg/archipelago-interface/dinput8.dll
 
-    - name: Debug 3
-      if: always()
-      run: cmake --version
-
-
-
-
-
-          #    - name: CMake
-          #      run: env VCPKG_ROOT=/opt/deps/vcpkg cmake --preset mingw CMakeLists.txt 
-          #    
-          #    - name: Build
-          #      run: make -C build/vcpkg/ all
-          #
-          #    - if: always()
-          #      name: Debug 5
-          #      run: ls -lh build/vcpkg/archipelago-interface/dinput8.dll
-          #
-          #    - name: Save dll
-          #      uses: actions/upload-artifact@v4
-          #      with:
-          #        name: dinput8
-          #        path: build/vcpkg/archipelago-interface/dinput8.dll
+    - name: Save dll
+      uses: actions/upload-artifact@v4
+      with:
+        name: dinput8
+        path: build/vcpkg/archipelago-interface/dinput8.dll
