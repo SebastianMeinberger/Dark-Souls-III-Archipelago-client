@@ -11,7 +11,7 @@ jobs:
     - name: Cache apt dependencies
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
-        packages: build-essential pkg-config mingw-w64 cmake unzip
+        packages: build-essential pkg-config mingw-w64 binutils-mingw-w64 cmake unzip
 
     - name: Cache non apt dependencies
       id: cache-non-apt
@@ -54,28 +54,12 @@ jobs:
       run: env VCPKG_ROOT=/opt/deps/vcpkg cmake --preset mingw CMakeLists.txt
 
     - if: always()
-      name: Debug
-      uses: actions/upload-artifact@v4
-      with:
-        name: CMakeCache.txt.log
-        path: /opt/deps/vcpkg/buildtrees/detect_compiler/config-x64-linux-rel-CMakeCache.txt.log
-
-    - if: always()
-      name: Debug 2
-      uses: actions/upload-artifact@v4
-      with:
-        name: CMakeErr.log
-        path: /opt/deps/vcpkg/buildtrees/detect_compiler/config-x64-linux-rel-err.log
-
-
-    - if: always()
       name: Debug 3
-      run: ls /usr/x86_64-w64-mingw32
+      run: ls /usr/
 
     - if: always()
       name: Debug 4
-      run: x86_64-w64-mingw32-g++ --version
-
+      run: ls /usr/bin/ | grep mingw
     
     - name: Build
       run: make -C build/vcpkg/ all
