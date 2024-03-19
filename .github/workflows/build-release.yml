@@ -72,6 +72,12 @@ jobs:
     - name: Build
       run: make -C build/vcpkg/ all
 
+    - name: debug
+      run: ls /usr/x86_64-w64-mingw32/lib
+
+    - name: debug
+      run: ls /usr/x86_64-w64-mingw32/bin
+
     - name: Aggregate outputs
       run: |
         mkdir client
