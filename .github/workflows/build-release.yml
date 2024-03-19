@@ -60,22 +60,16 @@ jobs:
     - name: Build
       run: make -C build/vcpkg/ all
 
+    - name: Aggregate outputs
+      run: |
+        mkdir client
+        cp build/vcpkg/archipelago-interface/dinput8.dll client/
+        cp /usr/x86_64-w64-mingw32/lib/libssp-0.dll client/
+        cp /usr/x86_64-w64-mingw32/lib/libstdc++-6.dll cient/
+        cp /usr/x86_64-w64-mingw32/lib/libgcc_s_seh-1.dll client/
+        cp /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll cient/
+
     - name: Save dll
       uses: actions/upload-artifact@v4
       with:
-        name: dinput8
-        path: build/vcpkg/archipelago-interface/dinput8.dll
-
-    - if: always()
-      name: debug
-      run: ls /usr/x86_64-w64-mingw32/lib
-
-    - name: Save Mingw Runtime libraries
-      uses: actions/upload-artifact@v4
-      with:
-        name: MingwRuntimeLibraries
-        path: |
-          /usr/x86_64-w64-mingw32/lib/libssp-0.dll
-          /usr/x86_64-w64-mingw32/lib/libstdc++-6.dll
-          /usr/x86_64-w64-mingw32/lib/libgcc_s_seh-1.dll
-          /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll
+        path: client
