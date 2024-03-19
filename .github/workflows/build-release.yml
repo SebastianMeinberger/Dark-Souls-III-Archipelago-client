@@ -13,6 +13,9 @@ jobs:
       with:
         packages: build-essential pkg-config cmake unzip
 
+    - name: Debug
+      run: cat /etc/apt/sources.list
+
     - name: apt backports
       run: sudo apt-get update && sudo apt-get install -t mantic-backports ninja-build
 
