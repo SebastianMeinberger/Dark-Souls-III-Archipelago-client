@@ -13,6 +13,12 @@ jobs:
       with:
         packages: build-essential pkg-config cmake unzip
 
+    - name: apt backports
+      run: sudo apt-get update && sudo apt-get install -t mantic-backports ninja-build
+
+    - name: test
+      run: ninja --version
+
     - name: Cache non apt dependencies
       id: cache-non-apt
       uses: actions/cache@v4
@@ -29,17 +35,17 @@ jobs:
       name: Get vcpkg
       run: wget -qO vcpkg.tar.gz https://github.com/microsoft/vcpkg/archive/master.tar.gz && sudo mkdir /opt/deps/vcpkg && sudo tar xf vcpkg.tar.gz --strip-components=1 -C /opt/deps/vcpkg && sudo /opt/deps/vcpkg/bootstrap-vcpkg.sh
 
-    - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
-      name: Get ninja 1.0.2 (apt repos only have 1.0.1)
-      run: wget -qO ninja.zip https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip && unzip ninja.zip && sudo cp ninja /opt/deps/
+        #- if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
+        #  name: Get ninja 1.0.2 (apt repos only have 1.0.1)
+        #  run: wget -qO ninja.zip https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip && unzip ninja.zip && sudo cp ninja /opt/deps/
     
     - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
       name: Get MASM assembler
       run: wget https://github.com/Terraspace/UASM/files/9881874/uasm256_linux64.zip && unzip uasm256_linux64.zip && chmod +x uasm && sudo cp uasm /opt/deps/
 
-    - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
-      name: Get newer mingw
-      run: sudo apt -t focal install mingw-w64 binutils-mingw-w64
+        #- if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
+        #  name: Get newer mingw
+        #  run: sudo apt -t focal install mingw-w64 binutils-mingw-w64
 
 
     - name: Create links to bins
