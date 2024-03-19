@@ -8,10 +8,22 @@ jobs:
 
     steps:
 
-    - name: Cache apt dependencies
-      uses: awalsh128/cache-apt-pkgs-action@latest
-      with:
-        packages: build-essential pkg-config cmake unzip mingw-w64 binutils-mingw-w64 mingw-w64-x86-64-dev
+      #    - name: Cache apt dependencies
+      #      uses: awalsh128/cache-apt-pkgs-action@latest
+      #      with:
+      #        packages: build-essential pkg-config cmake unzip mingw-w64 binutils-mingw-w64 mingw-w64-x86-64-dev
+      #
+      #
+    - name: Get apt deps
+      run: |
+        apt-get update
+        apt-get install build-essential
+        apt-get install pkg-config
+        apt-get install cmake
+        apt-get install unzip
+        apt-get install mingw-w64
+        apt-get install binutils-mingw-w64
+        apt-get install mingw-w64-x86-64-dev
 
     - name: Cache non apt dependencies
       id: cache-non-apt
