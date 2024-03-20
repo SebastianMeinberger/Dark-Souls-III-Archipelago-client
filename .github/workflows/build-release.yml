@@ -82,7 +82,7 @@ jobs:
     - name: Aggregate outputs
       run: |
         mkdir client
-        cp build/vcpkg/archipelago-interface/dinput8.dll client/
+        #cp build/vcpkg/archipelago-interface/dinput8.dll client/
         cp /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll client/
         cp /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libssp-0.dll client/
         cp /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libstdc++-6.dll client/
