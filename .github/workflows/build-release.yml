@@ -67,11 +67,11 @@ jobs:
         path: build/vcpkg/vcpkg_installed/x64-mingw-static
         key: vcpkg-cache-${{ hashFiles('vcpkg.json') }}
 
-    - name: CMake
-      run: env VCPKG_ROOT=/opt/deps/vcpkg cmake --preset mingw CMakeLists.txt 
-    
-    - name: Build
-      run: make -C build/vcpkg/ all
+          #- name: CMake
+          #  run: env VCPKG_ROOT=/opt/deps/vcpkg cmake --preset mingw CMakeLists.txt 
+          #
+          #- name: Build
+          #  run: make -C build/vcpkg/ all
 
     - name: debug
       run: ls /usr/x86_64-w64-mingw32/lib
