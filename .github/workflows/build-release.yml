@@ -1,49 +1,70 @@
-name: Build dinput8.dll
+name: Create Release
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*.*"
 
 jobs:
-  setup:
+  build:
     runs-on: ubuntu-latest
 
     steps:
 
-    - name: Cache apt dependencies
-      uses: awalsh128/cache-apt-pkgs-action@latest
-      with:
-        packages: build-essential pkg-config cmake unzip
+    - name: Get apt deps
+      run: |
+        sudo apt-get update
+        sudo apt-get install  build-essential \
+                              pkg-config \
+                              cmake \
+                              unzip \
+                              mingw-w64 \
+                              binutils-mingw-w64 \
+                              mingw-w64-x86-64-dev \
+                              gcc-mingw-w64-x86-64-win32-runtime
 
     - name: Cache non apt dependencies
       id: cache-non-apt
       uses: actions/cache@v4
       with:
-        path:
-          /opt/deps
+        path: /opt/deps
         key: non-apt-build-deps
     
     - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
-      name: Create dependencie patth
-      run: sudo mkdir /opt/deps
+      name: Create dependencie path
+      run: |
+        sudo mkdir /opt/deps
 
     - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
       name: Get vcpkg
-      run: wget -qO vcpkg.tar.gz https://github.com/microsoft/vcpkg/archive/master.tar.gz && sudo mkdir /opt/deps/vcpkg && sudo tar xf vcpkg.tar.gz --strip-components=1 -C /opt/deps/vcpkg && sudo /opt/deps/vcpkg/bootstrap-vcpkg.sh
+      run: |
+        wget -qO vcpkg.tar.gz https://github.com/microsoft/vcpkg/archive/master.tar.gz
+        sudo mkdir /opt/deps/vcpkg
+        sudo tar xf vcpkg.tar.gz --strip-components=1 -C /opt/deps/vcpkg
+        sudo /opt/deps/vcpkg/bootstrap-vcpkg.sh
 
     - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
-      name: Get ninja 1.0.2 (apt repos only have 1.0.1)
-      run: wget -qO ninja.zip https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip && unzip ninja.zip && sudo cp ninja /opt/deps/
+      name: Get ninja 1.0.2 (jammy repos only have 1.0.1)
+      run: |
+        wget -qO ninja.zip https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip
+        unzip ninja.zip
+        sudo cp ninja /opt/deps/
     
     - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
       name: Get MASM assembler
-      run: wget https://github.com/Terraspace/UASM/files/9881874/uasm256_linux64.zip && unzip uasm256_linux64.zip && chmod +x uasm && sudo cp uasm /opt/deps/
-
-    - if: ${{ steps.cache-non-apt.outputs.cache-hit != 'true' }}
-      name: Get newer mingw
-      run: sudo apt -t focal install mingw-w64 binutils-mingw-w64
-
+      run: |
+        wget https://github.com/Terraspace/UASM/files/9881874/uasm256_linux64.zip
+        unzip uasm256_linux64.zip
+        chmod +x uasm
+        sudo cp uasm /opt/deps/
 
     - name: Create links to bins
-      run: sudo ln -s /opt/deps/vcpkg/vcpkg /usr/bin/vcpkg && sudo ln -s /opt/deps/uasm /usr/bin/uasm && sudo ln -s /opt/deps/ninja /usr/bin/ninja
+      run: |
+        sudo ln -s /opt/deps/vcpkg/vcpkg /usr/bin/vcpkg
+        sudo ln -s /opt/deps/uasm /usr/bin/uasm
+        sudo ln -s /opt/deps/ninja /usr/bin/ninja
 
     - uses: actions/checkout@v4
       with:
@@ -56,17 +77,21 @@ jobs:
         key: vcpkg-cache-${{ hashFiles('vcpkg.json') }}
 
     - name: CMake
-      run: env VCPKG_ROOT=/opt/deps/vcpkg cmake --preset mingw CMakeLists.txt 
+      run: |
+        env VCPKG_ROOT=/opt/deps/vcpkg cmake --preset mingw CMakeLists.txt 
     
     - name: Build
-      run: make -C build/vcpkg/ all
+      run: |
+        make -C build/vcpkg/ all
 
-    - if: always()
-      name: Debug 5
-      run: ls -lh build/vcpkg/archipelago-interface/dinput8.dll
-
-    - name: Save dll
-      uses: actions/upload-artifact@v4
+    - name: Release draft
+      uses: softprops/action-gh-release@v2
       with:
-        name: dinput8
-        path: build/vcpkg/archipelago-interface/dinput8.dll
+        files: |
+          client/dinput8.dll
+          /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll
+          /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libssp-0.dll
+          /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libstdc++-6.dll
+          /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libgcc_s_seh-1.dll
+        fail_on_unmatched_files: true
+        draft: true
