@@ -1,6 +1,11 @@
-name: Build dinput8.dll
+name: Create Release
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*.*"
 
 jobs:
   build:
@@ -79,16 +84,14 @@ jobs:
       run: |
         make -C build/vcpkg/ all
 
-    - name: Aggregate outputs
-      run: |
-        mkdir client
-        cp build/vcpkg/archipelago-interface/dinput8.dll client/
-        cp /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll client/
-        cp /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libssp-0.dll client/
-        cp /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libstdc++-6.dll client/
-        cp /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libgcc_s_seh-1.dll client/
-        
-    - name: Save dlls (dinput8 + mingw runtime deps)
-      uses: actions/upload-artifact@v4
+    - name: Release draft
+      uses: softprops/action-gh-release@v2
       with:
-        path: client
+        files: |
+          client/dinput8.dll
+          /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll
+          /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libssp-0.dll
+          /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libstdc++-6.dll
+          /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libgcc_s_seh-1.dll
+        fail_on_unmatched_files: true
+        draft: true
