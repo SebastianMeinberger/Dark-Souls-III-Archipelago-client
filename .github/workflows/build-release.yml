@@ -3,9 +3,9 @@ name: Create Release
 on:
   push:
     branches:
-      - main
+      - 'main'
     tags:
-      - "v*.*"
+      - v*.**
 
 jobs:
   build:
