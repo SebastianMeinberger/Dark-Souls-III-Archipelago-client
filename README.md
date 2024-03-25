@@ -6,7 +6,7 @@ The goal is to streamline the build process (OS independent, consistend handling
 
 # When to use
 If you just want play a round archipelago, use the [original version](https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases).
-This version currently only bears value if you care about not using binaries that were build in an intransparent manner and don't wont to deal with building the original version (it's pretty hard due to it being build with Visual Studio).
+This version currently only bears value if you care about not using binaries that were build in an intransparent manner and don't want to deal with building the original version (it's pretty hard due to it being build with Visual Studio).
 
 
 # How to install
@@ -16,17 +16,21 @@ You need DS3 version 1.5 (current Version is 1.5.3).
 Follow the [archipelago guide](https://archipelago.gg/tutorial/Dark%20Souls%20III/setup/en) to downpatch.
 
 ## Prebuild
-TL;DR:
-Download the dlls from the latest release and place them in the game folder that pops up when you rightclick DS3 in steam and click "Browse local files" (on the same level where the .exe is).
+### TL;DR
+Download the dlls from the latest release and place them in the game folder that pops up when you rightclick DS3 in steam and click "Browse local files" (place on the same level where the .exe is).
+***Always play offline***, both to not get banned and to prevent unwanted patching.
+When starting DS3, a Windows CMD Window should open in addition to the game.
 
-
+### In depth
 This mod works by hijacking the dinput8.dll that is provided by Windows.
 Therefore you need to place the modified dll, avaiable in the release section, in the main game folder (the same where the .exe is).
 Additionaly, this version requires the mingw runtime.
 You can either use the runtime dlls provided in the release, i.e. place the other dlls alongside the dinput8.dll, or install the mingw runtime on your system.
 For the latter, you need to keep in mind that you need to install a mingw runtime that is compatible with the mingw version avaiable in the Ubuntu Jammy repos (2.38-3), since Jammy is used for the Github Linux runners.
+When you now start the game, a Windows CMD window should open.
+This only works sometimes under wine (did never work for me, but I saw reports of people using it without problems).
+It is probably the best to use Windows until a release that removes all Windows API interactions is ready.
 
-When starting DS3, a Windows CMD windows should open in addition to the game (works only partially under wine).
 
 ## Or build yourself
 Build deps:
