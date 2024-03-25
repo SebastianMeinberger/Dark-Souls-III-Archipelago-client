@@ -89,7 +89,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          client/dinput8.dll
+          build/vcpkg/archipelago-interface/dinput8.dll
           /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll
           /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libssp-0.dll
           /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libstdc++-6.dll
